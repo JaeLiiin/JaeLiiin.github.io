@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="论文笔记,Machine Learning Security,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="作者：Florian Tramèr, Dan Boneh [Standford University] [ICLR 2019] Abstract为保护机器学习中隐私性和数据完整性，通常可以利用可信执行环境(Trusted Execution Environment)，利用硬件和软件的保护机制来使敏感数据的计算独立出来，但这种方式存在效率上的损失。因此这篇论文提出将计算过程分到可信设备和不可信设备">
+<meta name="keywords" content="论文笔记,Machine Learning Security">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文笔记[Slalom: Fast, Verifiable and Private Execution of Neural Networks in Trusted Hardware]">
+<meta property="og:url" content="http://yoursite.com/2019/02/26/论文笔记-Slalom-Fast-Verifiable-and-Private-Execution-of-Neural-Networks-in-Trusted-Hardware/index.html">
+<meta property="og:site_name" content="记录">
+<meta property="og:description" content="作者：Florian Tramèr, Dan Boneh [Standford University] [ICLR 2019] Abstract为保护机器学习中隐私性和数据完整性，通常可以利用可信执行环境(Trusted Execution Environment)，利用硬件和软件的保护机制来使敏感数据的计算独立出来，但这种方式存在效率上的损失。因此这篇论文提出将计算过程分到可信设备和不可信设备">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/02/26/论文笔记-Slalom-Fast-Verifiable-and-Private-Execution-of-Neural-Networks-in-Trusted-Hardware/integrity&privacy.png">
+<meta property="og:updated_time" content="2019-02-27T12:49:24.671Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="论文笔记[Slalom: Fast, Verifiable and Private Execution of Neural Networks in Trusted Hardware]">
+<meta name="twitter:description" content="作者：Florian Tramèr, Dan Boneh [Standford University] [ICLR 2019] Abstract为保护机器学习中隐私性和数据完整性，通常可以利用可信执行环境(Trusted Execution Environment)，利用硬件和软件的保护机制来使敏感数据的计算独立出来，但这种方式存在效率上的损失。因此这篇论文提出将计算过程分到可信设备和不可信设备">
+<meta name="twitter:image" content="http://yoursite.com/2019/02/26/论文笔记-Slalom-Fast-Verifiable-and-Private-Execution-of-Neural-Networks-in-Trusted-Hardware/integrity&privacy.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/26/论文笔记-Slalom-Fast-Verifiable-and-Private-Execution-of-Neural-Networks-in-Trusted-Hardware/">
+
+
+
+
+
+  <title>论文笔记[Slalom: Fast, Verifiable and Private Execution of Neural Networks in Trusted Hardware] | 记录</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">记录</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/26/论文笔记-Slalom-Fast-Verifiable-and-Private-Execution-of-Neural-Networks-in-Trusted-Hardware/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jianlin">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="记录">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">论文笔记[Slalom: Fast, Verifiable and Private Execution of Neural Networks in Trusted Hardware]</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-26T20:02:04+08:00">
+                2019-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>作者：Florian Tramèr, Dan Boneh [Standford University] [ICLR 2019]</p>
+<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>为保护机器学习中隐私性和数据完整性，通常可以利用可信执行环境(Trusted Execution Environment)，利用硬件和软件的保护机制来使敏感数据的计算独立出来，但这种方式存在效率上的损失。因此这篇论文提出将计算过程分到可信设备和不可信设备中，以高性能执行深度神经网络的。Slalom，将DNN中的所有线性层计算工作外包到不可信但快速的设备中，同时能够保证DNN的privacy和integrity。<br><a id="more"></a></p>
+<h2 id="Three-motivating-scenarios"><a href="#Three-motivating-scenarios" class="headerlink" title="Three motivating scenarios"></a>Three motivating scenarios</h2><ol>
+<li>Outsourced ML。当ML任务外包给云服务商，要充分信任云服务上会正确执行。恶意云（A dishonest cloud provider）可能会用一个较弱的模型，对不同的用户使用不公平的方法，或者恶意的篡改计算结果。甚至敏感数据（sensitive data）会被泄露。</li>
+<li>Federated learning。（联合学习）It works like this: your device downloads the current model, improves it by learning from data on your phone, and then summarizes the changes as a small focused update. Only this update to the model is sent to the cloud, using encrypted communication, where it is immediately averaged with other user updates to improve the shared model. All the training data remains on your device, and no individual updates are stored in the cloud. 联合学习中隐私性可以通过加密的方式来保证，完整性需要确保恶意用户（malicious user）和受感染的设备不会上传错误的模型到云端。</li>
+<li>Infected hosts。恶意软件可能会篡改本地机器的行为产生错误的结果。</li>
+</ol>
+<p>以上三种方式对隐私性的保护不是必要的（2，3训练模型和数据都存在本地），但对于数据完整性是必须的。</p>
+<h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>$u$代表用户，DNN用$F(x)：X\rightarrow Y$表示，$P_T$代表可信处理器，$P_U$代表不可信而高效的处理器。</p>
+<ul>
+<li>Integrity，用户可以和$P_T$交互，收到正确的输出$y=F(x)$，或者错误的概率很小。</li>
+<li>Privacy，$P_U$不能获得输入$x$的信息</li>
+</ul>
+<h3 id="Freivald’s-Algorithm"><a href="#Freivald’s-Algorithm" class="headerlink" title="Freivald’s Algorithm"></a>Freivald’s Algorithm</h3><p>$n \times n$的矩阵$A$，$B$和$\tilde{C}$在定义域$\mathbb{F}$，验证$\tilde{C}=AB$是否成立可以使用一个随机向量$r$，从而验证$\tilde{C}r=A(Br)$。比较矩阵乘法，需要花费$O(n^3)$次运算（可以改进到$O(n^{2.81})$）。Freivald算法可以通过三次矩阵-向量乘法，只需花费$O(n^2)$次运算。</p>
+<p>令$D:=\tilde{C}-AB$，向量$r$是从$S^n$中随机选的，False Positive(FP，被模型预测为正的负样本)概率：<br>$$Pr[\tilde{C}r=A(Br)|\tilde{C}\neq AB]=Pr[Dr=0|D\neq 0]\leq \cfrac{1}{|S|}$$<br><a href="https://en.wikipedia.org/wiki/Freivalds%27_algorithm" target="_blank" rel="noopener">证明</a>。通过重复检验$k$次，使得出错概率小于$1/{|S|^k}$。</p>
+<h3 id="私密的线性运算"><a href="#私密的线性运算" class="headerlink" title="私密的线性运算"></a>私密的线性运算</h3><p>输入的隐私保护可以通过同态加密的方式来保护，但开销较大。如图中，$P_T$对每一层的输入都加上随机向量，并把修改后的输入交给$P_U$来做计算，将结果$\tilde{Z}_i$返回给$P_T$。在$P_T$中计算$Z_i=\tilde{Z}_i-R_iW_i$，$R_i$可以预先计算。最后的输出为$Z_n$。论文的大致方案如下图所示，接下来讨论具体的实施方案。<br><img src="integrity&amp;privacy.png" alt="icon.png"></p>
+<h3 id="Quantization"><a href="#Quantization" class="headerlink" title="Quantization"></a>Quantization</h3><p>在他们的框架中，他们对浮点数进行处理，将其转化为整数，整数的值域在$\mathbb{Z}_p$。转换浮点数$x$为一个固定点表示（fixed-point representation）$\tilde{x}=FP(x;k):=\left \lfloor {2^k\cdot x} \right \rceil$，代表取最近的整数。$\tilde{W}=FP(W,k)$、偏重$\tilde{b}=FP(W,2k)$。对结果缩小$2^k$倍。对参数和输入数据的变换，DNN所有计算中值不超过$2^{24}$为保证没有精度损失。论文对VGG16和MobileNet两个模型进行评估，模型准确率大约有少于0.5%的损失。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/论文笔记/" rel="tag"># 论文笔记</a>
+          
+            <a href="/tags/Machine-Learning-Security/" rel="tag"># Machine Learning Security</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jianlin</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-number">1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Three-motivating-scenarios"><span class="nav-number">2.</span> <span class="nav-text">Three motivating scenarios</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Background"><span class="nav-number">3.</span> <span class="nav-text">Background</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Freivald’s-Algorithm"><span class="nav-number">3.1.</span> <span class="nav-text">Freivald’s Algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#私密的线性运算"><span class="nav-number">3.2.</span> <span class="nav-text">私密的线性运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Quantization"><span class="nav-number">3.3.</span> <span class="nav-text">Quantization</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jianlin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
