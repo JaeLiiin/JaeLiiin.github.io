@@ -81,12 +81,12 @@
 <meta property="og:site_name" content="记录">
 <meta property="og:description" content="作者：Florian Tramèr, Dan Boneh [Standford University] [ICLR 2019] Abstract为保护机器学习中隐私性和数据完整性，通常可以利用可信执行环境(Trusted Execution Environment)，利用硬件和软件的保护机制来使敏感数据的计算独立出来，但这种方式存在效率上的损失。因此这篇论文提出将计算过程分到可信设备和不可信设备">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/02/26/论文笔记-Slalom-Fast-Verifiable-and-Private-Execution-of-Neural-Networks-in-Trusted-Hardware/integrity&privacy.png">
-<meta property="og:updated_time" content="2019-02-27T12:49:24.671Z">
+<meta property="og:image" content="https://github-1252452885.cos.ap-chengdu.myqcloud.com/integrity%26privacy.png">
+<meta property="og:updated_time" content="2019-04-22T14:14:47.687Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文笔记[Slalom: Fast, Verifiable and Private Execution of Neural Networks in Trusted Hardware]">
 <meta name="twitter:description" content="作者：Florian Tramèr, Dan Boneh [Standford University] [ICLR 2019] Abstract为保护机器学习中隐私性和数据完整性，通常可以利用可信执行环境(Trusted Execution Environment)，利用硬件和软件的保护机制来使敏感数据的计算独立出来，但这种方式存在效率上的损失。因此这篇论文提出将计算过程分到可信设备和不可信设备">
-<meta name="twitter:image" content="http://yoursite.com/2019/02/26/论文笔记-Slalom-Fast-Verifiable-and-Private-Execution-of-Neural-Networks-in-Trusted-Hardware/integrity&privacy.png">
+<meta name="twitter:image" content="https://github-1252452885.cos.ap-chengdu.myqcloud.com/integrity%26privacy.png">
 
 
 
@@ -321,7 +321,7 @@
 </ul>
 <h3 id="Freivald’s-Algorithm"><a href="#Freivald’s-Algorithm" class="headerlink" title="Freivald’s Algorithm"></a>Freivald’s Algorithm</h3><p>$n \times n$的矩阵$A$，$B$和$\tilde{C}$在定义域$\mathbb{F}$，验证$\tilde{C}=AB$是否成立可以使用一个随机向量$r$，从而验证$\tilde{C}r=A(Br)$。比较矩阵乘法，需要花费$O(n^3)$次运算（可以改进到$O(n^{2.81})$）。Freivald算法可以通过三次矩阵-向量乘法，只需花费$O(n^2)$次运算。</p>
 <p>令$D:=\tilde{C}-AB$，向量$r$是从$S^n$中随机选的，False Positive(FP，被模型预测为正的负样本)概率：<br>$$Pr[\tilde{C}r=A(Br)|\tilde{C}\neq AB]=Pr[Dr=0|D\neq 0]\leq \cfrac{1}{|S|}$$<br><a href="https://en.wikipedia.org/wiki/Freivalds%27_algorithm" target="_blank" rel="noopener">证明</a>。通过重复检验$k$次，使得出错概率小于$1/{|S|^k}$。</p>
-<h3 id="私密的线性运算"><a href="#私密的线性运算" class="headerlink" title="私密的线性运算"></a>私密的线性运算</h3><p>输入的隐私保护可以通过同态加密的方式来保护，但开销较大。如图中，$P_T$对每一层的输入都加上随机向量，并把修改后的输入交给$P_U$来做计算，将结果$\tilde{Z}_i$返回给$P_T$。在$P_T$中计算$Z_i=\tilde{Z}_i-R_iW_i$，$R_i$可以预先计算。最后的输出为$Z_n$。论文的大致方案如下图所示，接下来讨论具体的实施方案。<br><img src="integrity&amp;privacy.png" alt="icon.png"></p>
+<h3 id="私密的线性运算"><a href="#私密的线性运算" class="headerlink" title="私密的线性运算"></a>私密的线性运算</h3><p>输入的隐私保护可以通过同态加密的方式来保护，但开销较大。如图中，$P_T$对每一层的输入都加上随机向量，并把修改后的输入交给$P_U$来做计算，将结果$\tilde{Z}_i$返回给$P_T$。在$P_T$中计算$Z_i=\tilde{Z}_i-R_iW_i$，$R_i$可以预先计算。最后的输出为$Z_n$。论文的大致方案如下图所示，接下来讨论具体的实施方案。<br><img src="https://github-1252452885.cos.ap-chengdu.myqcloud.com/integrity%26privacy.png" alt="icon.png"></p>
 <h3 id="Quantization"><a href="#Quantization" class="headerlink" title="Quantization"></a>Quantization</h3><p>在他们的框架中，他们对浮点数进行处理，将其转化为整数，整数的值域在$\mathbb{Z}_p$。转换浮点数$x$为一个固定点表示（fixed-point representation）$\tilde{x}=FP(x;k):=\left \lfloor {2^k\cdot x} \right \rceil$，代表取最近的整数。$\tilde{W}=FP(W,k)$、偏重$\tilde{b}=FP(W,2k)$。对结果缩小$2^k$倍。对参数和输入数据的变换，DNN所有计算中值不超过$2^{24}$为保证没有精度损失。论文对VGG16和MobileNet两个模型进行评估，模型准确率大约有少于0.5%的损失。</p>
 
       
@@ -351,6 +351,22 @@
       
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/22/Docker-PyCharm快速搭建开发环境/" rel="prev" title="Docker+PyCharm快速搭建开发环境">
+                Docker+PyCharm快速搭建开发环境 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
@@ -424,7 +440,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -437,7 +453,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
