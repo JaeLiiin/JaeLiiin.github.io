@@ -73,14 +73,24 @@
 
 
 
+<meta name="description" content="&amp;ensp;&amp;ensp;本文介绍使用Docker容器结合PyCharm快速搭建机器学习类任务开发环境。机器学习的开发往往会涉及到很多python的包，环境的搭建和维护是一件头疼的事，使用Docker现成的机器学习工具Deepo能跳过环境搭建的过程，再结合PyCharm可以实现本地开发调试。本文在Mac上做的尝试，linux操作系统同理，windows也有相应的docker软件使用，Pycharm的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Docker+PyCharm快速搭建开发环境">
+<meta property="og:title" content="Docker+PyCharm快速搭建机器学习开发环境">
 <meta property="og:url" content="http://yoursite.com/2019/04/22/Docker-PyCharm快速搭建开发环境/index.html">
 <meta property="og:site_name" content="记录">
+<meta property="og:description" content="&amp;ensp;&amp;ensp;本文介绍使用Docker容器结合PyCharm快速搭建机器学习类任务开发环境。机器学习的开发往往会涉及到很多python的包，环境的搭建和维护是一件头疼的事，使用Docker现成的机器学习工具Deepo能跳过环境搭建的过程，再结合PyCharm可以实现本地开发调试。本文在Mac上做的尝试，linux操作系统同理，windows也有相应的docker软件使用，Pycharm的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-22T14:02:49.216Z">
+<meta property="og:image" content="https://github-1252452885.cos.ap-chengdu.myqcloud.com/project-interpreter.png">
+<meta property="og:image" content="https://github-1252452885.cos.ap-chengdu.myqcloud.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-23%20%E4%B8%8A%E5%8D%8811.28.25.png">
+<meta property="og:image" content="https://github-1252452885.cos.ap-chengdu.myqcloud.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-23%20%E4%B8%8A%E5%8D%8811.29.17.png">
+<meta property="og:image" content="https://github-1252452885.cos.ap-chengdu.myqcloud.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-23%20%E4%B8%8A%E5%8D%8811.35.38.png">
+<meta property="og:image" content="https://github-1252452885.cos.ap-chengdu.myqcloud.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-23%20%E4%B8%8B%E5%8D%8812.01.22.png">
+<meta property="og:image" content="https://github-1252452885.cos.ap-chengdu.myqcloud.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-23%20%E4%B8%8B%E5%8D%881.34.29.png">
+<meta property="og:updated_time" content="2019-04-23T05:36:39.514Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Docker+PyCharm快速搭建开发环境">
+<meta name="twitter:title" content="Docker+PyCharm快速搭建机器学习开发环境">
+<meta name="twitter:description" content="&amp;ensp;&amp;ensp;本文介绍使用Docker容器结合PyCharm快速搭建机器学习类任务开发环境。机器学习的开发往往会涉及到很多python的包，环境的搭建和维护是一件头疼的事，使用Docker现成的机器学习工具Deepo能跳过环境搭建的过程，再结合PyCharm可以实现本地开发调试。本文在Mac上做的尝试，linux操作系统同理，windows也有相应的docker软件使用，Pycharm的">
+<meta name="twitter:image" content="https://github-1252452885.cos.ap-chengdu.myqcloud.com/project-interpreter.png">
 
 
 
@@ -116,7 +126,7 @@
 
 
 
-  <title>Docker+PyCharm快速搭建开发环境 | 记录</title>
+  <title>Docker+PyCharm快速搭建机器学习开发环境 | 记录</title>
   
 
 
@@ -250,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Docker+PyCharm快速搭建开发环境</h1>
+          <h1 class="post-title" itemprop="name headline">Docker+PyCharm快速搭建机器学习开发环境</h1>
         
 
         <div class="post-meta">
@@ -300,7 +310,57 @@
       
 
       
-        
+        <p>&ensp;&ensp;本文介绍使用Docker容器结合PyCharm快速搭建机器学习类任务开发环境。机器学习的开发往往会涉及到很多python的包，环境的搭建和维护是一件头疼的事，使用Docker现成的机器学习工具Deepo能跳过环境搭建的过程，再结合PyCharm可以实现本地开发调试。本文在Mac上做的尝试，linux操作系统同理，windows也有相应的docker软件使用，Pycharm的设置都是相似的。<br>&ensp;&ensp;最终的效果是省略环境搭建的步骤，使用PyCharm进行代码的开发和调试。<br><a id="more"></a></p>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><p>&ensp;&ensp;Docker是一种容器技术，类似于虚拟机，但比虚拟机更轻便。Docker容器内的应用程序直接运行于宿主的内核，而没有自己的内核，而且也没有硬件虚拟。更多Docker的相关知识可以看《Docker-从入门到实践》。</p>
+<h2 id="Deepo"><a href="#Deepo" class="headerlink" title="Deepo"></a>Deepo</h2><p>&ensp;&ensp;<a href="https://github.com/ufoym/deepo" target="_blank" rel="noopener">Deepo</a>是一个包含一系列Docker镜像的项目，这些镜像中包含了TensorFlow、Caffe和Torch等多种深度学习框架。也就是说，在这些镜像中已经包含了大部分流行的机器学习框架，只需要将镜像下载到本地，运行容器即可直接使用这些框架。<br>&ensp;&ensp;Deepo提供了GPU和CPU版本的框架，这里使用的mac以CPU的镜像为例子，对于GPU版本的镜像需要先安装Nvidia官方的nividia-docker和相应版本的NVIDIA驱动。<br>&ensp;&ensp;在github页面可以看到Deepo拥有众多的不同的镜像，以tag来区分，可以根据需要下载对应的镜像。这里以<code>docker pull ufoym/deepo:cpu</code>为例，这样会下载包含cpu版本的机器学习框架的镜像。</p>
+<h2 id="Deepo-ssh镜像"><a href="#Deepo-ssh镜像" class="headerlink" title="Deepo-ssh镜像"></a>Deepo-ssh镜像</h2><p>&ensp;&ensp;在有了Deepo镜像之后，为了方便使用，可以在Deepo镜像基础上配置ssh服务，以便于mac通过ssh连接登录到容器，以及PyCharm调用远程的python的interpreter。<br>&ensp;&ensp;登录到现有的Deepo容器，以<code>docker run -it ufoym/deepo:cpu bash</code>交互式的进入deepo容器中。<br>&ensp;&ensp;<strong>配置容器ssh连接</strong> &ensp; 这一步可以使用mac通过ssh连接ubuntu容器。首先通过<code>apt-get install openssh-server</code>用于开启ssh服务的外部连接。<br>&ensp;&ensp;<strong>配置sshd</strong> &ensp;修改sshd的默认配置，编辑文件<code>/etc/ssh/sshd_config</code>，修改文件中的以下三行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PermitRootLogin yes # 可以登录 root 用户</span><br><span class="line">PubkeyAuthentication yes # 可以使用 ssh 公钥许可</span><br><span class="line">AuthorizedKeysFile	.ssh/authorized_keys # 公钥信息保存到该文件中</span><br></pre></td></tr></table></figure></p>
+<p>&ensp;&ensp;<strong>重启sshd</strong> &ensp;<code>/etc/init.d/ssh restart</code>使得这些配置生效。<br>&ensp;&ensp;<strong>添加mac的公钥到容器</strong> &ensp;这一步是为了能免密码ssh登录到容器中。</p>
+<ol>
+<li>在容器中<code>mkdir ~/.ssh</code></li>
+<li><code>touch ~/.ssh/authorized_keys</code></li>
+<li>新开一个mac终端窗口，<code>ssh-keygen -t rsa -C &quot;youremail@example.com&quot;</code>（替换为你自己的邮箱），会在<code>~/.ssh</code>目录下生成三个文件<code>id_rsa</code>、<code>id_rsa.pub</code>、<code>known_hosts</code>。复制<code>id_rsa.pub</code>文件中的内容。</li>
+<li>将复制的内容粘贴到容器<code>~/.ssh/authorized_keys</code>文件中。  </li>
+</ol>
+<p>&ensp;&ensp;<strong>提交修改到镜像</strong> &ensp;以上对容器的修改并不会改变镜像文件，需要提交修改生成一个新的镜像。</p>
+<ol>
+<li><code>docker ps -a</code>查看刚刚使用deepo容器，记录下该容器的<code>CONTAINER ID</code>，例如<code>8b5a86d18e58</code>。</li>
+<li><code>docker commit -m &#39;add ssh&#39; -a &#39;your-name&#39; 8b5a86d18e58 deepo-ssh</code>这样会将刚刚在deepo容器中配置的ssh服务保存，并生成新的deepo-ssh镜像。在后续使用<code>docker images</code>命令可以查看到新的镜像已经被保存。</li>
+</ol>
+<p>&ensp;&ensp;<strong>运行最终的容器</strong> &ensp;<br><code>docker run -d -p 12622:22 -v ~/data:/data -v ~/config:/config deepo-ssh /usr/sbin/sshd -D</code>  </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">值</th>
+<th style="text-align:left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">-d</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">后台运行</td>
+</tr>
+<tr>
+<td style="text-align:left">-p</td>
+<td style="text-align:left">12622:22</td>
+<td style="text-align:left">绑定当前mac的12622端口到deepo-ssh容器的22端口（ssh服务默认为22端口）</td>
+</tr>
+<tr>
+<td style="text-align:left">-v</td>
+<td style="text-align:left">~/data:/data</td>
+<td style="text-align:left">将mac的~/data目录挂载到容器/data目录</td>
+</tr>
+<tr>
+<td style="text-align:left">/usr/sbin/sshd -D</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">容器运行的命令和参数，开始ssh服务</td>
+</tr>
+</tbody>
+</table>
+<p>&ensp;&ensp;这样就可以通过<code>ssh -p 12622 root@localhost</code>连接到容器，可以进入python解释程序，执行<code>import torch</code>等命令查看机器学习框架是否能正常使用。在<code>exit</code>退出ssh连接后，容器仍运行在后台。<br>&ensp;&ensp;以上的操作是在mac本地，同样适合在一台远程的linux服务器上，部署一个docker容器。那么在ssh连接时，<code>localhost</code>就需要改为该服务器的公网或者内网IP。同时本地的<code>~/data</code>和<code>~/config</code>目录和deepo-ssh容器中的<code>/data</code>和<code>/config</code>目录相互绑定。如果是远程服务器的情景，那么就是服务器上的目录和容器中的目录相互绑定，不再和本地mac有关。</p>
+<h3 id="PyCharm-Docker"><a href="#PyCharm-Docker" class="headerlink" title="PyCharm+Docker"></a>PyCharm+Docker</h3><p>&ensp;&ensp;经过以上的操作，可以理解成本地12622端口开启了ssh服务，运行这一个独立的ubuntu服务器。接下来介绍如何使用PyCharm调用Docker容器中的解释器。（注意需要PyCharm专业版）<br>在Pycharm中PyCharm–&gt;Project–&gt;Project Interpreter，如下图所示：<br><img src="https://github-1252452885.cos.ap-chengdu.myqcloud.com/project-interpreter.png" alt="projec">点击右上按钮选择添加解释器。<br><img src="https://github-1252452885.cos.ap-chengdu.myqcloud.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-23%20%E4%B8%8A%E5%8D%8811.28.25.png" alt><br>选择<code>SSH Interpreter</code>，按图中内容。<br><img src="https://github-1252452885.cos.ap-chengdu.myqcloud.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-23%20%E4%B8%8A%E5%8D%8811.29.17.png" alt>选用openssh连接，并添加私钥文件。<br><img src="https://github-1252452885.cos.ap-chengdu.myqcloud.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-23%20%E4%B8%8A%E5%8D%8811.35.38.png" alt>选择docker容器内的python解释器。<br>这样在PyCharm写代码时就会调用已经包含机器学习框架的python解释器，能够代码提醒和智能补全。<br>接下来配置Run/Debug Configurations，<img src="https://github-1252452885.cos.ap-chengdu.myqcloud.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-23%20%E4%B8%8B%E5%8D%8812.01.22.png" alt><br>&ensp;&ensp;如上配置，这里解释器是docker中的解释器，注意<code>Working Directory</code>是docker容器中的目录，这为<code>/data</code>，由于docker的设置，本机<code>~/data</code>和docker容器中的<code>/data</code>目录相映射，因此需要执行的文件可以放入本机<code>~/data</code>目录。以上就可以在Pycharm调用容器内的解释器以使用容器中已安装的机器学习框架，而且执行和调试可以在本地进行，提高开发效率。<br>&ensp;&ensp;以上结合Docker和PyCharm快速搭建机器学习开发环境，这例子的情景是在mac后台运行容器，并将本机的端口映射到容器的22端口，实现ssh连接容器，并在PyCharm中调用容器的解释器，以实现本地的机器学习任务的开发调式。以上的模式对于一个远程的服务器同样适用，在服务器上创建docker容器并运行在后台，映射到服务器的一个端口。在Pycharm中调用远程服务器的解释器，并创建本地目录和服务器目录的映射（在Deployment配置），就可以实现在本地写代码和调试。<br><img src="https://github-1252452885.cos.ap-chengdu.myqcloud.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-23%20%E4%B8%8B%E5%8D%881.34.29.png" alt></p>
+
       
     </div>
     
@@ -384,8 +444,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -436,6 +505,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker"><span class="nav-number">1.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deepo"><span class="nav-number">2.</span> <span class="nav-text">Deepo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deepo-ssh镜像"><span class="nav-number">3.</span> <span class="nav-text">Deepo-ssh镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PyCharm-Docker"><span class="nav-number">3.1.</span> <span class="nav-text">PyCharm+Docker</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
